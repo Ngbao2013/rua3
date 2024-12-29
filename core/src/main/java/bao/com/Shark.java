@@ -15,15 +15,17 @@ import static java.lang.Math.sqrt;
 public class Shark extends Actor {
     TextureRegion textureregion;
     int time;
+    int speedX = 2;
     Polygon polygon;
     int dan =0;
     float huong = 1;
     Shark(float x,float y, Stage s){
         textureregion = new TextureRegion(new Texture("sharky.png")) ;
         setPosition(x,y);
-        setRotation(-90);
+        setRotation(0);
         setSize(textureregion.getRegionWidth(), textureregion.getRegionHeight());
         s.addActor(this);
+
         float[]toadocacdiem = {
             14,2,
             12,16,
@@ -64,13 +66,30 @@ public class Shark extends Actor {
         setOrigin(getWidth()/2,getHeight()/2);
         polygon.setRotation(getRotation());
         polygon.setPosition(getX(),getY());
-        if(dan == 0) {
-            moveBy(huong * 3 * MathUtils.cosDeg(getRotation()), huong * 3 * MathUtils.sinDeg(getRotation()));
+
+        if(getX()>Gdx.graphics.getWidth()){
+            setScaleY(-getScaleY());
+            setRotation(180);
+
         }
-        if((getX() < 0 || getX() > Gdx.graphics.getWidth()) || (getY() < 0 || getY() > Gdx.graphics.getHeight())){
-            setScaleX(-huong);
-            huong *= -1;
+        if(getX()<0){
+            setScaleY(-getScaleY());
+            setRotation(0);
+
         }
+        moveBy(5*MathUtils.cosDeg(getRotation()),5*MathUtils.sinDeg(getRotation()));
+
+
+
+
+
+//        if(dan == 0) {
+//            moveBy(huong * 3 * MathUtils.cosDeg(getRotation()), huong * 3 * MathUtils.sinDeg(getRotation()));
+//        }
+//        if((getX() < 0 || getX() > Gdx.graphics.getWidth()) || (getY() < 0 || getY() > Gdx.graphics.getHeight())){
+//            setScaleX(-huong);
+//            huong *= -1;
+//        }
     }
     void duoi(float xt,float yt){
         if(dan == 1){

@@ -63,16 +63,37 @@ public class Turtle extends Actor {
             time += delta;
         }
         if(koda){
-            if(Gdx.input.isKeyPressed(Input.Keys.UP) && speed<4f){
-                speed += 0.1f;
+            if(Gdx.input.isKeyPressed(Input.Keys.UP) && speed<10f){
+                speed += 1f;
+//                if(getX()>Gdx.graphics.getWidth()){
+//                    speed += -delta;
+//                }
+//                if(getX()<0){
+//                    speed += -delta;
+//
+//                }
             }
             if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
                 rotateBy(2);
+//                if(getX()>Gdx.graphics.getWidth()){
+//                    rotateBy(-2);
+//                }
+//                if(getX()<0){
+//                    rotateBy(-2);
+//
+//                }
             }
             if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
                 rotateBy(-2);
+//                if(getX()>Gdx.graphics.getWidth()){
+//                    rotateBy(2);
+//                }
+//                if(getX()<0){
+//                    rotateBy(2);
+
+ //               }
             }
-            speed *= 0.99f;
+            speed *= 1f;
         }
         moveBy(speed * MathUtils.cosDeg(getRotation()),speed * MathUtils.sinDeg(getRotation()));
     }

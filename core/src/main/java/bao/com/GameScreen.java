@@ -146,7 +146,6 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(nen, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         game.font.draw(game.batch, "starfish:" + String.valueOf(starfish), 0, Gdx.graphics.getHeight());
-//        tank.remove();
         if (starfish < 1) {
             game.batch.draw(win, Gdx.graphics.getWidth() / 2 - win.getWidth() / 2, Gdx.graphics.getHeight() / 2 - win.getHeight() / 2);
             game.batch.draw(pressc, Gdx.graphics.getWidth() / 2 - pressc.getWidth() / 2, Gdx.graphics.getHeight() / 2 - pressc.getHeight() / 2 - gameover.getHeight() - 10);
@@ -208,6 +207,19 @@ public class GameScreen implements Screen {
             if (Gdx.input.isTouched()) {
                 System.out.println("x = " + Gdx.input.getX() + " y = " + (Gdx.graphics.getHeight() - Gdx.input.getY()));
             }
+
+//            if(turtle.getX()>0){
+//                turtle.moveBy(10,0);
+//            }
+//            if(turtle.getX()<Gdx.graphics.getWidth()){
+//                turtle.moveBy(-10,0);
+//            }
+//            if(turtle.getY()>0){
+//                turtle.moveBy(0,10);
+//            }
+//            if(turtle.getY()<Gdx.graphics.getHeight()){
+//                turtle.moveBy(0,-10);
+//            }
 
             if (Intersector.overlapConvexPolygons(turtle.getPolygon(), rock.getPolygon())
                 || Intersector.overlapConvexPolygons(turtle.getPolygon(), rock2.getPolygon())
