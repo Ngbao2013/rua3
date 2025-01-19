@@ -77,7 +77,7 @@ public class Shark extends Actor {
             setRotation(0);
 
         }
-        moveBy(5*MathUtils.cosDeg(getRotation()),5*MathUtils.sinDeg(getRotation()));
+        moveBy(3*MathUtils.cosDeg(getRotation()),3*MathUtils.sinDeg(getRotation()));
 
 
 

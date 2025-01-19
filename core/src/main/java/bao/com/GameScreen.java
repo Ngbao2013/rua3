@@ -29,9 +29,10 @@ import static com.badlogic.gdx.Gdx.input;
 
 public class GameScreen implements Screen {
     OrthographicCamera camera;
+    Texture logo;
     Master game;
     Stage stage;
-    Texture nen;
+    Background nen;
     Turtle turtle;
     Solid rock;
     Solid rock2;
@@ -45,6 +46,8 @@ public class GameScreen implements Screen {
     StarFish sao;
     StarFish nawn;
     Shark tank;
+    Shark tank2;
+    Shark tank3;
     ShapeRenderer shapeRenderer;
     Random ran;
     Whirlpool an;
@@ -84,7 +87,7 @@ public class GameScreen implements Screen {
         lasersound = Gdx.audio.newSound(Gdx.files.internal("sfx_laser1.ogg"));
         nenMusic = Gdx.audio.newMusic(Gdx.files.internal("assets_Master_of_the_Feast.ogg"));
 
-        nen = new Texture("water-border.jpg");
+        nen = new Background(0,0,stage);
         rockImage = new Texture("rock.png");
         sighImage = new Texture("sign.png");
         win = new Texture("you-win.png");
@@ -104,7 +107,12 @@ public class GameScreen implements Screen {
         bao = new StarFish(ran.nextInt(Gdx.graphics.getWidth() - 64), ran.nextInt(Gdx.graphics.getHeight() - 64),stage) ;
         nawn = new StarFish(ran.nextInt(Gdx.graphics.getWidth() - 64), ran.nextInt(Gdx.graphics.getHeight() - 64),stage) ;
         sao = new StarFish(ran.nextInt(Gdx.graphics.getWidth() - 64), ran.nextInt(Gdx.graphics.getHeight() - 64),stage) ;
-        tank = new Shark(Gdx.graphics.getWidth() - 100,Gdx.graphics.getHeight() - 262,stage);
+        tank = new Shark(Gdx.graphics.getWidth() - 100,Gdx.graphics.getHeight() - 10,stage);
+
+
+        tank2 = new Shark(Gdx.graphics.getWidth() - 300,Gdx.graphics.getHeight() - 300,stage);
+        tank3 = new Shark(Gdx.graphics.getWidth() - 30,Gdx.graphics.getHeight() - 500,stage);
+
         rock.polygon.setPosition(rock.getX(),rock.getY());
         rock2.polygon.setPosition(rock2.getX(),rock2.getY());
         rock3.polygon.setPosition(rock3.getX(),rock3.getY());
@@ -113,6 +121,10 @@ public class GameScreen implements Screen {
         sigh2.polygon.setPosition(sigh2.getX(),sigh2.getY());
         turtle.polygon.setPosition(turtle .getX(),turtle .getY());
         tank.polygon.setPosition(tank.getX(),tank.getY());
+        tank2.polygon.setPosition(tank2.getX(),tank2.getY());
+        tank3.polygon.setPosition(tank3.getX(),tank3.getY());
+
+
         stage.act();
         System.out.println(kt);
 
@@ -122,6 +134,7 @@ public class GameScreen implements Screen {
         style.font = game.font;
         style.fontColor = Color.WHITE;
         style.up = new TextureRegionDrawable(soundButtonImage);
+
         TextButton startButton = new TextButton( "",style);
         startButton.setPosition(Gdx.graphics.getWidth() - startButton.getWidth() - 5,
             Gdx.graphics.getHeight() - startButton.getHeight() - 5) ;
@@ -136,6 +149,8 @@ public class GameScreen implements Screen {
                 }
             }
         });
+
+        System.out.println(stage.getCamera().position.x + " "+stage.getCamera().position.y);
     }
 
     @Override
@@ -143,20 +158,58 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(Color.BLACK);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
+
+        if((turtle.getX()>400-(turtle.speed * MathUtils.cosDeg(turtle.getRotation()))-turtle.getWidth()/2)&&(turtle.getX()<800-(turtle.speed * MathUtils.cosDeg(turtle.getRotation()))-turtle.getWidth()/2)) {
+            stage.getCamera().position.x = turtle.getX()+ turtle.getWidth()/2;
+        }
+        if((turtle.getY()>300- (turtle.speed*MathUtils.sinDeg(turtle.getRotation()))-turtle.getHeight()/2)&&(turtle.getY()<500-(turtle.speed*MathUtils.sinDeg(turtle.getRotation()))-turtle.getHeight()/2)) {
+            stage.getCamera().position.y = turtle.getY()+turtle.getHeight()/2;
+        }
+
+
+        if(stage.getCamera().position.x<400){
+            stage.getCamera().position.x=400;
+        }
+        if(stage.getCamera().position.x>800){
+            stage.getCamera().position.x=800;
+        }
+        if(stage.getCamera().position.y<300){
+            stage.getCamera().position.y=300;
+        }
+        if(stage.getCamera().position.y>500){
+            stage.getCamera().position.y=500;
+        }
+
+
+
         game.batch.begin();
-        game.batch.draw(nen, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         game.font.draw(game.batch, "starfish:" + String.valueOf(starfish), 0, Gdx.graphics.getHeight());
+
         if (starfish < 1) {
             game.batch.draw(win, Gdx.graphics.getWidth() / 2 - win.getWidth() / 2, Gdx.graphics.getHeight() / 2 - win.getHeight() / 2);
             game.batch.draw(pressc, Gdx.graphics.getWidth() / 2 - pressc.getWidth() / 2, Gdx.graphics.getHeight() / 2 - pressc.getHeight() / 2 - gameover.getHeight() - 10);
             kt = true;
-            stage.clear();
         }
         if (Intersector.overlapConvexPolygons(turtle.getPolygon(), tank.getPolygon())) {
             game.batch.draw(gameover, Gdx.graphics.getWidth() / 2 - gameover.getWidth() / 2, Gdx.graphics.getHeight() / 2 - gameover.getHeight() / 2 + 10);
             game.batch.draw(pressc, Gdx.graphics.getWidth() / 2 - pressc.getWidth() / 2, Gdx.graphics.getHeight() / 2 - pressc.getHeight() / 2 - gameover.getHeight() - 10);
             kt = true;
             stage.clear();
+            nenMusic.stop();
+        }
+        if (Intersector.overlapConvexPolygons(turtle.getPolygon(), tank2.getPolygon())) {
+            game.batch.draw(gameover, Gdx.graphics.getWidth() / 2 - gameover.getWidth() / 2, Gdx.graphics.getHeight() / 2 - gameover.getHeight() / 2 + 10);
+            game.batch.draw(pressc, Gdx.graphics.getWidth() / 2 - pressc.getWidth() / 2, Gdx.graphics.getHeight() / 2 - pressc.getHeight() / 2 - gameover.getHeight() - 10);
+            kt = true;
+            stage.clear();
+            nenMusic.stop();
+        }
+        if (Intersector.overlapConvexPolygons(turtle.getPolygon(), tank3.getPolygon())) {
+            game.batch.draw(gameover, Gdx.graphics.getWidth() / 2 - gameover.getWidth() / 2, Gdx.graphics.getHeight() / 2 - gameover.getHeight() / 2 + 10);
+            game.batch.draw(pressc, Gdx.graphics.getWidth() / 2 - pressc.getWidth() / 2, Gdx.graphics.getHeight() / 2 - pressc.getHeight() / 2 - gameover.getHeight() - 10);
+            kt = true;
+            stage.clear();
+            nenMusic.stop();
         }
         game.batch.end();
         if(kt == false){
@@ -202,24 +255,21 @@ public class GameScreen implements Screen {
                     tank.dan = 1;
                     laser.remove();
                 }
+                if (Intersector.overlapConvexPolygons(laser.getPolygon(), tank2.getPolygon())) {
+                    tank2.dan = 1;
+                    laser.remove();
+                }
+                if (Intersector.overlapConvexPolygons(laser.getPolygon(), tank3.getPolygon())) {
+                    tank3.dan = 1;
+                    laser.remove();
+                }
             }
 
-            if (Gdx.input.isTouched()) {
-                System.out.println("x = " + Gdx.input.getX() + " y = " + (Gdx.graphics.getHeight() - Gdx.input.getY()));
+            if (input.isTouched()) {
+                System.out.println("x = " + input.getX() + " y = " + (Gdx.graphics.getHeight() - input.getY()));
             }
+            System.out.println(stage.getCamera().position.x + " "+stage.getCamera().position.y);
 
-//            if(turtle.getX()>0){
-//                turtle.moveBy(10,0);
-//            }
-//            if(turtle.getX()<Gdx.graphics.getWidth()){
-//                turtle.moveBy(-10,0);
-//            }
-//            if(turtle.getY()>0){
-//                turtle.moveBy(0,10);
-//            }
-//            if(turtle.getY()<Gdx.graphics.getHeight()){
-//                turtle.moveBy(0,-10);
-//            }
 
             if (Intersector.overlapConvexPolygons(turtle.getPolygon(), rock.getPolygon())
                 || Intersector.overlapConvexPolygons(turtle.getPolygon(), rock2.getPolygon())
@@ -246,33 +296,55 @@ public class GameScreen implements Screen {
 
             if (Intersector.overlapConvexPolygons(turtle.getPolygon(), baoquan.getPolygon())) {
                 an = new Whirlpool(new Texture("whirlpool.png"), 5, 2);
+
+                if (starfish < 2){
+                    an = new Whirlpool(new Texture("sparkle.png"),8,8);
+                }
+
                 an.setPosition(baoquan.getX(), baoquan.getY());
                 baoquan.setPosition(ran.nextInt((int) (Gdx.graphics.getWidth() - baoquan.getWidth())), ran.nextInt((int) (Gdx.graphics.getHeight() - baoquan.getHeight())));
                 stage.addActor(an);
                 dropSound.play();
                 starfish--;
+
             }
 
             if (Intersector.overlapConvexPolygons(turtle.getPolygon(), haiquan.getPolygon())) {
                 an = new Whirlpool(new Texture("whirlpool.png"), 5, 2);
+
+                if (starfish < 2){
+                    an = new Whirlpool(new Texture("sparkle.png"),8,8);
+                }
                 an.setPosition(haiquan.getX(), haiquan.getY());
                 haiquan.setPosition(ran.nextInt((int) (Gdx.graphics.getWidth() - haiquan.getWidth())), ran.nextInt((int) (Gdx.graphics.getHeight() - haiquan.getHeight())));
                 stage.addActor(an);
                 dropSound.play();
                 starfish--;
+
             }
 
             if (Intersector.overlapConvexPolygons(turtle.getPolygon(), bao.getPolygon())) {
                 an = new Whirlpool(new Texture("whirlpool.png"), 5, 2);
+
+                if (starfish < 2){
+                    an = new Whirlpool(new Texture("sparkle.png"),8,8);
+                }
                 an.setPosition(bao.getX(), bao.getY());
                 bao.setPosition(ran.nextInt((int) (Gdx.graphics.getWidth() - bao.getWidth())), ran.nextInt((int) (Gdx.graphics.getHeight() - bao.getHeight())));
                 stage.addActor(an);
                 dropSound.play();
                 starfish--;
+
+
             }
+
 
             if (Intersector.overlapConvexPolygons(turtle.getPolygon(), nawn.getPolygon())) {
                 an = new Whirlpool(new Texture("whirlpool.png"), 5, 2);
+
+                if (starfish < 2){
+                    an = new Whirlpool(new Texture("sparkle.png"),8,8);
+                }
                 an.setPosition(nawn.getX(), nawn.getY());
                 nawn.setPosition(ran.nextInt((int) (Gdx.graphics.getWidth() - nawn.getWidth())), ran.nextInt((int) (Gdx.graphics.getHeight() - nawn.getHeight())));
                 stage.addActor(an);
@@ -280,18 +352,32 @@ public class GameScreen implements Screen {
                 starfish--;
             }
 
+
+
             if (Intersector.overlapConvexPolygons(turtle.getPolygon(), sao.getPolygon())) {
                 an = new Whirlpool(new Texture("whirlpool.png"), 5, 2);
+
+                if (starfish < 2){
+                    an = new Whirlpool(new Texture("sparkle.png"),8,8);
+                }
                 an.setPosition(sao.getX(), sao.getY());
                 sao.setPosition(ran.nextInt((int) (Gdx.graphics.getWidth() - sao.getWidth())), ran.nextInt((int) (Gdx.graphics.getHeight() - sao.getHeight())));
                 stage.addActor(an);
                 dropSound.play();
                 starfish--;
+
             }
+
+
 
             stage.draw();
             stage.act();
             tank.duoi(turtle.getX(), turtle.getY());
+            tank2.duoi(turtle.getX(), turtle.getY());
+            tank3.duoi(turtle.getX(), turtle.getY());
+
+
+
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 //            shapeRenderer.polygon(turtle.getPolygon().getTransformedVertices());

@@ -17,6 +17,7 @@ public class Turtle extends Actor {
     float time;
     Polygon polygon;
     Float speed = 0f;
+    Stage stage;
     Boolean koda = true;
 
     Turtle(Texture texture,int cot,int hang,Stage s){
@@ -63,15 +64,11 @@ public class Turtle extends Actor {
             time += delta;
         }
         if(koda){
-            if(Gdx.input.isKeyPressed(Input.Keys.UP) && speed<10f){
+            if(Gdx.input.isKeyPressed(Input.Keys.UP) && speed<6f){
                 speed += 1f;
-//                if(getX()>Gdx.graphics.getWidth()){
-//                    speed += -delta;
-//                }
-//                if(getX()<0){
-//                    speed += -delta;
-//
-//                }
+//                stage.getCamera().position.y += 1;
+
+
             }
             if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
                 rotateBy(2);
@@ -96,6 +93,7 @@ public class Turtle extends Actor {
             speed *= 1f;
         }
         moveBy(speed * MathUtils.cosDeg(getRotation()),speed * MathUtils.sinDeg(getRotation()));
+
     }
 
     @Override
